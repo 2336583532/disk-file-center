@@ -15,4 +15,9 @@ public class ResMsg<T> {
     private int code;
     private T data;
     private String msg;
+
+
+    public static<T> ResMsg<T> builderNotImplResp() {
+        return ResMsg.<T>builder().code(FAIL_CODE).msg("未找到业务逻辑").build();
+    }
 }

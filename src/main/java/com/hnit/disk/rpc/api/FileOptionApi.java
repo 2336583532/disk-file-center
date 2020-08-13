@@ -1,40 +1,44 @@
 package com.hnit.disk.rpc.api;
 import com.hnit.disk.response.ResMsg;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * 文件操作接口
  */
+@Api("文件操作接口文档")
+@RequestMapping(value = "/api/fileCenter/fileOptin")
 public interface FileOptionApi {
-    /**
-     * 增加目录
-     * @return
-     */
-    public ResMsg<Boolean> addCatalog(String path, String catalogName);
-
-    /**
-     * 删除目录
-     */
-    public ResMsg<Boolean> deleteCatalog(String path,String catalogName);
-
-    /**
-     * 目录重命名
-     */
-    public ResMsg<Boolean> renameCatalog(String path,String catalogName);
 
     /**
      * 添加文件
      */
-    public ResMsg<Boolean> addFile(String path,String filename);
+    @ApiOperation(value = "添加文件",notes = "添加文件")
+    @RequestMapping("/addFile")
+    default ResMsg<Boolean> addFile(@RequestBody String path, String filename){
+        return ResMsg.builderNotImplResp();
+    }
 
     /**
      * 删除文件
      */
-    public ResMsg<Boolean> deleteFile(String path,String filename);
+    @ApiOperation(value = "删除文件",notes = "删除文件")
+    @RequestMapping("/deleteFile")
+    default ResMsg<Boolean> deleteFile(@RequestBody String path,String filename){
+        return ResMsg.builderNotImplResp();
+    }
 
     /**
      * 文件重命名
      */
-    public ResMsg<Boolean> renameFile(String path,String filename);
+    @ApiOperation(value = "文件重命名",notes = "文件重命名")
+    @RequestMapping("/renameFile")
+    default ResMsg<Boolean> renameFile(@RequestBody String path,String filename){
+        return ResMsg.builderNotImplResp();
+    }
 
 
 }
