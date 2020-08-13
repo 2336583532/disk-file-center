@@ -1,0 +1,13 @@
+package com.hnit.disk;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class DiskFileCenterApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(DiskFileCenterApplication.class, args);
+    }
+
+}
