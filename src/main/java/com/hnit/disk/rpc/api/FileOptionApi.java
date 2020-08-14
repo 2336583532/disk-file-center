@@ -1,16 +1,16 @@
 package com.hnit.disk.rpc.api;
+import com.hnit.disk.response.FileNodeVO;
 import com.hnit.disk.response.ResMsg;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * 文件操作接口
  */
 @Api("文件操作接口文档")
-@RequestMapping(value = "/api/fileCenter/fileOptin")
+@RequestMapping(value = "/api/fileCenter/fileOption")
 public interface FileOptionApi {
 
     /**
@@ -40,5 +40,12 @@ public interface FileOptionApi {
         return ResMsg.builderNotImplResp();
     }
 
-
+    /**
+     * 获得路径下所有文件夹和文件
+     */
+    @ApiOperation(value = "获得路径下所有文件夹和文件",notes = "获得路径下所有文件夹和文件")
+    @RequestMapping("/getFileByPath")
+    default ResMsg<FileNodeVO> getFileByPath(@RequestBody String path){
+        return ResMsg.builderNotImplResp();
+    }
 }

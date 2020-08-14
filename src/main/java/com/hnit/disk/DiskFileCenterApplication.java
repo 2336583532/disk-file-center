@@ -2,9 +2,9 @@ package com.hnit.disk;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import org.springframework.cloud.netflix.feign.EnableFeignClients;
 
+@EnableFeignClients
 @SpringBootApplication
 public class DiskFileCenterApplication {
 

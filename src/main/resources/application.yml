@@ -1,7 +1,22 @@
 server:
   port: 8763
-#\u65E5\u5FD7\u914D\u7F6E
+
 logging:
   config: classpath:logback-spring.xml
   file:
     path: D:/diskLog/file
+#feien
+feign:
+  compression:
+    request:
+      enabled: true
+    response:
+      enabled：true
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: basic
+  hystrix:
+    enabled: false
