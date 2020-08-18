@@ -1,30 +1,61 @@
 package com.hnit.disk.rpc;
 
+import com.hnit.disk.response.FileNodeVO;
 import com.hnit.disk.response.ResMsg;
-import com.hnit.disk.rpc.api.CatalogOptionApi;
+import com.hnit.disk.service.CatalogService;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * @Author: liguangming
  * @Date: 2020/8/13
  */
-@Slf4j(topic = "[目录操作RPC服务]")
-@Controller
-public class CatalogOptionRpc implements CatalogOptionApi {
-    @Override
-    public ResMsg<Boolean> mkdir(@RequestBody String path, String catalogName) {
-        return null;
+@RestController
+@RequestMapping("/disk/fileCenter/catelogOption")
+public class CatalogOptionRpc {
+    @Autowired
+    private CatalogService catalogService;
+
+    @ApiOperation(value = "获取全部文件",notes = "获取全部文件")
+    @GetMapping("/getFiles")
+    public ResMsg<List<FileNodeVO>> getFiles( String path) {
+        try {
+            List<FileNodeVO> files = catalogService.getFiles(path);
+            return ResMsg.builderSuccess(files);
+        } catch (IOException e) {
+            return ResMsg.builderFail();
+        }
     }
 
-    @Override
+    @PostMapping("/mkdir")
+    @ApiOperation(value = "增加目录",notes = "增加目录")
+    public ResMsg<Boolean> mkdir(@RequestBody String path, String catalogName) {
+        Boolean result = null;
+        if(path.equals("/")){
+           result = catalogService.mkdir(path+catalogName);
+        }else {
+           result = catalogService.mkdir(path+"/"+catalogName);
+        }
+        if (result){
+            return ResMsg.builderSuccess(result);
+        }else{
+            return ResMsg.builderFail();
+        }
+    }
+
+    @PostMapping("/deleteDir")
+    @ApiOperation(value = "删除目录",notes = "删除目录")
     public ResMsg<Boolean> deleteDir(@RequestBody String path, String catalogName) {
         return null;
     }
 
-    @Override
+    @PostMapping("/renameDir")
+    @ApiOperation(value = "目录重命名",notes = "目录重命名")
     public ResMsg<Boolean> renameDir(@RequestBody String path, String catalogName) {
         return null;
     }
