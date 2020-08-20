@@ -17,6 +17,7 @@ public class FileOptionRpc {
     @ApiOperation(value = "添加文件",notes = "添加文件")
     @PostMapping("/uploadFile")
     public ResMsg<Boolean> uploadFile(@RequestBody MultipartFile file) {
+        System.out.println("添加文件成功:"+file.getOriginalFilename());
         return null;
     }
     /**
