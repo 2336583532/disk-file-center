@@ -4,7 +4,6 @@ import com.hnit.disk.response.FileNodeVO;
 import com.hnit.disk.response.ResMsg;
 import com.hnit.disk.service.CatalogService;
 import io.swagger.annotations.ApiOperation;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,15 +47,11 @@ public class CatalogOptionRpc {
         }
     }
 
-    @PostMapping("/deleteDir")
-    @ApiOperation(value = "删除目录",notes = "删除目录")
-    public ResMsg<Boolean> deleteDir(@RequestBody String path, String catalogName) {
-        return null;
-    }
 
-    @PostMapping("/renameDir")
+    @GetMapping("/rename")
     @ApiOperation(value = "目录重命名",notes = "目录重命名")
-    public ResMsg<Boolean> renameDir(@RequestBody String path, String catalogName) {
-        return null;
+    public ResMsg<Boolean> renameDir(String path, String newName,String oldName) {
+        Boolean rename = catalogService.rename(path, oldName, newName);
+        return ResMsg.builderSuccess(rename);
     }
 }

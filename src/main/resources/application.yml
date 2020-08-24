@@ -3,6 +3,10 @@ server:
 spring:
   application:
     name: file-center
+  servlet:
+    multipart:
+      max-file-size: 1000Mb
+      max-request-size: 5000Mb
 eureka:
   instance:
     lease-expiration-duration-in-seconds: 30
@@ -24,3 +28,7 @@ hadoop:
   hdfs:
     ip: localhost
     port: 9000
+
+#文件临时保存路径
+file:
+  upload: D:/diskLog/temp

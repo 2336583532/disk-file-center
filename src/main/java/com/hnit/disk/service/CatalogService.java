@@ -17,4 +17,6 @@ public interface CatalogService {
     public Boolean mkdir(String path);
 
     public List<FileNodeVO> getFiles(String path) throws IOException;
+
+    public Boolean rename(String path, String newName, String oldName);
 }

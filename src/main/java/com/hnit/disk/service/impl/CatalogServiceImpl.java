@@ -75,4 +75,9 @@ public class CatalogServiceImpl implements CatalogService {
         }
         return fileList;
     }
+
+    @Override
+    public Boolean rename(String path, String oldName, String newName) {
+        return hdfsClient.rename(path+oldName,path+newName);
+    }
 }

@@ -105,4 +105,50 @@ public class HdfsClient {
         }
         return null;
     }
+
+    public Boolean uploadFile(String fromPath,String toPath){
+        Hdfs hdfs = null;
+        try {
+            hdfs = hdfsPool.borrowObject();
+            hdfs.upload(fromPath,toPath);
+            return true;
+        } catch (Exception e) {
+            log.info("操作失败,%s",e);
+        }finally {
+            if (null != hdfs) {
+                hdfsPool.returnObject(hdfs);
+            }
+        }
+        return false;
+    }
+
+    public Boolean deleteNode(String path) {
+        Hdfs hdfs = null;
+        try {
+            hdfs = hdfsPool.borrowObject();
+            return hdfs.deleteNode(path);
+        } catch (Exception e) {
+            log.info("操作失败,%s",e);
+        }finally {
+            if (null != hdfs) {
+                hdfsPool.returnObject(hdfs);
+            }
+        }
+        return false;
+    }
+
+    public Boolean rename(String path, String newName) {
+        Hdfs hdfs = null;
+        try {
+            hdfs = hdfsPool.borrowObject();
+            return hdfs.rename(path,newName);
+        } catch (Exception e) {
+            log.info("操作失败,%s",e);
+        }finally {
+            if (null != hdfs) {
+                hdfsPool.returnObject(hdfs);
+            }
+        }
+        return false;
+    }
 }

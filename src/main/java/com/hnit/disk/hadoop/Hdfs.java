@@ -81,4 +81,19 @@ public class Hdfs {
     public RemoteIterator<LocatedFileStatus> getFiles(String path) throws IOException {
         return fs.listLocatedStatus(new Path(path));
     }
+
+    public void upload(String formPath,String toPath) throws IOException {
+        fs.copyFromLocalFile(new Path(formPath),new Path(toPath));
+    }
+
+    public Boolean deleteNode(String path) throws IOException {
+        boolean delete = fs.delete(new Path(path), true);
+        return delete;
+    }
+
+    public Boolean rename(String path, String newName) throws IOException {
+        boolean rename = fs.rename(new Path(path), new Path(newName));
+        return rename;
+
+    }
 }

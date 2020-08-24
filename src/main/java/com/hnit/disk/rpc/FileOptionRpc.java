@@ -2,31 +2,42 @@ package com.hnit.disk.rpc;
 
 import com.hnit.disk.response.FileNodeVO;
 import com.hnit.disk.response.ResMsg;
+import com.hnit.disk.service.FileService;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import javax.servlet.ServletException;
+import java.io.IOException;
 
-@RestController("/disk/fileCenter/fileOption")
+@RestController
+@RequestMapping("/disk/fileCenter/fileOption")
 public class FileOptionRpc {
+    @Value("${file.upload}")
+    private String fileLoadPath;
+
+    @Autowired
+    private FileService fileService;
+
     /**
      * 添加文件
      */
     @ApiOperation(value = "添加文件",notes = "添加文件")
-    @PostMapping("/uploadFile")
-    public ResMsg<Boolean> uploadFile(@RequestBody MultipartFile file) {
-        System.out.println("添加文件成功:"+file.getOriginalFilename());
-        return null;
+    @PostMapping(value = "/uploadFile",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResMsg<Boolean> uploadFile(@RequestPart MultipartFile file, @RequestParam("toPath") String toPath) throws IOException, ServletException {
+        ResMsg<Boolean> booleanResMsg = fileService.uploadFile(file, toPath);
+        return booleanResMsg;
     }
     /**
      * 删除文件
      */
-    @ApiOperation(value = "删除文件",notes = "删除文件")
-    @RequestMapping("/deleteFile")
-    public ResMsg<Boolean> deleteFile(String path, String filename) {
-        return null;
+    @ApiOperation(value = "删除节点",notes = "删除节点")
+    @RequestMapping("/deleteNode")
+    public ResMsg<Boolean> deleteFile(String path, String name) {
+        ResMsg resMsg = fileService.deleteNode(path, name);
+        return resMsg;
     }
 
     /**
