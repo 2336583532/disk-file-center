@@ -1,10 +1,15 @@
 package com.hnit.disk.service.impl;
 
+import com.hnit.disk.em.LenEnum;
 import com.hnit.disk.hadoop.HdfsClient;
+import com.hnit.disk.response.FileNodeVO;
 import com.hnit.disk.response.ResMsg;
 import com.hnit.disk.service.FileService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.apache.hadoop.fs.LocatedFileStatus;
+import org.apache.hadoop.fs.RemoteIterator;
+import org.apache.hadoop.hdfs.protocol.SnapshotDiffReport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,6 +20,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @Author: liguangming
@@ -25,6 +33,16 @@ import java.nio.file.Paths;
 public class FileServiceImpl implements FileService {
     @Value("${file.upload}")
     private String fileLoadPath;
+    @Value("${file.typc.pic}")
+    private String PIC;
+    @Value("${file.typc.video}")
+    private String VIDEO;
+    @Value("${file.typc.DOC}")
+    private String DOC;
+    @Value("${file.typc.music}")
+    private String MUSIC;
+
+
 
     @Autowired
     private HdfsClient hdfsClient;
@@ -58,6 +76,45 @@ public class FileServiceImpl implements FileService {
         return ResMsg.builderSuccess(result);
     }
 
+    @Override
+    public Boolean download(String filePath,String fileName) {
+        createFilePathIfNotExist();
+        hdfsClient.download(filePath+fileName,fileLoadPath);
+        return true;
+    }
+
+    @Override
+    public List<FileNodeVO> orderBy(String path, String type) {
+        RemoteIterator<LocatedFileStatus> files = hdfsClient.getFiles(path);
+        List<FileNodeVO> fileList = new ArrayList<FileNodeVO>();
+        while (true) {
+            try {
+                if (!files.hasNext()) {
+                    break;
+                }
+                LocatedFileStatus next = files.next();
+                if(next.isFile() && isType(next,type)){
+                    FileNodeVO fileNode = FileNodeVO.builder().fileName(next.getPath().getName()).updateTime( new Date(next.getModificationTime())).isFolder(next.isDirectory()).build();
+                    long len = next.getLen();
+                    if(len < LenEnum.B.getLen()){
+                        fileNode.setFileSize(len+"B");
+                    }else if(len >= LenEnum.B.getLen() && len < LenEnum.KB.getLen()) {
+                        fileNode.setFileSize(len*1.0/LenEnum.B.getLen()+"KB");
+                    }else if(len >= LenEnum.KB.getLen() && len < LenEnum.MB.getLen()){
+                        fileNode.setFileSize(len*1.0/LenEnum.KB.getLen()+"MB");
+                    }else {
+                        fileNode.setFileSize(len*1.0/LenEnum.MB.getLen()+"GB");
+                    }
+                    fileList.add(fileNode);
+                }
+            } catch (IOException e) {
+                log.error("file-center:getFile:%s", e);
+            }
+
+        }
+        return fileList;
+    }
+
     /**
      * 创建临时路径
      *
@@ -74,4 +131,38 @@ public class FileServiceImpl implements FileService {
         return dir;
     }
 
+
+    private Boolean isType(LocatedFileStatus next,String type){
+        if(type.equals("pic")){
+            return isThisType(PIC,next.getPath().getName());
+        }else if(type.equals("video")){
+            return isThisType(VIDEO,next.getPath().getName());
+        }else if(type.equals("doc")){
+            return isThisType(DOC,next.getPath().getName());
+        }else if(type.equals("music")){
+            return isThisType(MUSIC,next.getPath().getName());
+        }else {
+            return isThisType("other",next.getPath().getName());
+        }
+    }
+
+    private Boolean isThisType(String typeStr,String name){
+        if(typeStr.equals("other")){
+            typeStr = PIC+","+VIDEO+","+DOC+","+MUSIC;
+            String[] split = typeStr.split(",");
+            for (String str:split){
+                if(name.endsWith(str)){
+                    return true;
+                }
+            }
+            return false;
+        }
+        String[] split = typeStr.split(",");
+        for (String str:split){
+            if(name.endsWith(str)){
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -32,3 +32,8 @@ hadoop:
 #文件临时保存路径
 file:
   upload: D:/diskLog/temp
+  type:
+    pic: bmp,jpg,png,tif,gif,pcx,tga,exif,fpx,svg,psd,cdr,pcd,dxf,ufo,eps,ai,raw,WMF,webp
+    video: .avi,.wma,.rmvb,.rm,.flash,.mp4,.mid,.3GP
+    doc: txt,doc,xls,ppt,pptx,docx,xml,
+    music: .mp3,.wav,.wma,m4a,.mp4,.amr,.ogg,.midi,.mv,.rm

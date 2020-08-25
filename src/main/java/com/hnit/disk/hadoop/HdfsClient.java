@@ -151,4 +151,20 @@ public class HdfsClient {
         }
         return false;
     }
+
+    public Boolean download(String filePath,String localPath) {
+        Hdfs hdfs = null;
+        try {
+            hdfs = hdfsPool.borrowObject();
+            hdfs.download(filePath,localPath);
+            return true;
+        } catch (Exception e) {
+            log.info("操作失败,%s",e);
+        }finally {
+            if (null != hdfs) {
+                hdfsPool.returnObject(hdfs);
+            }
+        }
+        return false;
+    }
 }

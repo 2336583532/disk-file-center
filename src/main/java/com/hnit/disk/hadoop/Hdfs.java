@@ -96,4 +96,8 @@ public class Hdfs {
         return rename;
 
     }
+
+    public void download(String filePath,String localPath) throws IOException {
+       fs.copyToLocalFile(new Path(filePath),new Path(localPath));
+    }
 }
