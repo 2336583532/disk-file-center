@@ -33,13 +33,13 @@ import java.util.List;
 public class FileServiceImpl implements FileService {
     @Value("${file.upload}")
     private String fileLoadPath;
-    @Value("${file.typc.pic}")
+    @Value("${file.type.pic}")
     private String PIC;
-    @Value("${file.typc.video}")
+    @Value("${file.type.video}")
     private String VIDEO;
-    @Value("${file.typc.DOC}")
+    @Value("${file.type.doc}")
     private String DOC;
-    @Value("${file.typc.music}")
+    @Value("${file.type.music}")
     private String MUSIC;
 
 
